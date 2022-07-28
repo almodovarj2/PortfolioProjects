@@ -1,0 +1,78 @@
+SELECT *
+FROM `portfolio-357219.COVID_Data.Covid_deaths`
+WHERE continent IS NOT NULL
+ORDER BY 3,4
+LIMIT 1000;
+
+SELECT *
+FROM `portfolio-357219.COVID_Data.covid_vaccination`
+ORDER BY 3,4
+LIMIT 1000;
+
+SELECT location,date, total_cases, new_cases, total_deaths, population
+FROM `portfolio-357219.COVID_Data.Covid_deaths`
+ORDER BY 1,2;
+
+-- Comparing Total Cases to Total Deaths
+-- Shows the mortality rate as a percentage, per country.
+SELECT location,date, total_cases,total_deaths, (total_deaths/total_cases) *100 as DeathPercentage
+FROM `portfolio-357219.COVID_Data.Covid_deaths`
+ORDER BY 1,2;
+
+-- Comparing Total Cases to 
+-- Shows the percentage of Population that contracted Covid
+SELECT location,date, total_cases,population, (total_cases/population)*100 AS InfectionRate
+FROM `portfolio-357219.COVID_Data.Covid_deaths`
+ORDER BY 1,2;
+
+-- What Countries have the highest infection rate vs population
+SELECT Location, population, MAX(total_cases) AS HighestInfectionRate, MAX((total_cases/population))*100 AS infection_rate
+FROM `portfolio-357219.COVID_Data.Covid_deaths`
+GROUP BY Location,Population
+ORDER BY infection_rate DESC;
+
+-- Countries with the highest death rate.
+SELECT Location, MAX(total_deaths) AS total_deaths, population
+FROM `portfolio-357219.COVID_Data.Covid_deaths`
+WHERE continent IS NOT NULL
+GROUP BY Location, population
+ORDER BY total_deaths DESC;
+
+-- Ordering the data by Continent
+SELECT continent, MAX(total_deaths) AS total_deaths
+FROM `portfolio-357219.COVID_Data.Covid_deaths`
+WHERE continent IS NOT NULL
+GROUP BY continent
+ORDER BY total_deaths DESC;
+
+-- Global Numbers
+SELECT SUM(new_cases) as total_cases, SUM(new_deaths) as total_deaths, SUM(new_deaths)/SUM(new_cases)*100 as DeathPercentage
+FROM `portfolio-357219.COVID_Data.Covid_deaths`
+WHERE continent IS NOT NULL
+--GROUP BY date
+ORDER BY 1,2;
+
+-- Total Population vs Vaccinations
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, SUM(vac.new_vaccinations) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) as PeopleVaccinated
+FROM `portfolio-357219.COVID_Data.Covid_deaths` dea
+Join `portfolio-357219.COVID_Data.covid_vaccination` vac
+  ON dea.location = vac.location
+  AND dea.date = vac.date
+  WHERE dea.continent IS NOT NULL
+ORDER BY 2,3;
+
+-- Use a CTE
+
+WITH PopvsVac --(Continent, Location, Date, Population, new_vaccinations, PeopleVaccinated)
+AS
+(
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, SUM(vac.new_vaccinations) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) as PeopleVaccinated
+FROM `portfolio-357219.COVID_Data.Covid_deaths` dea
+Join `portfolio-357219.COVID_Data.covid_vaccination` vac
+  ON dea.location = vac.location
+  AND dea.date = vac.date
+WHERE dea.continent IS NOT NULL
+-- ORDER BY 2,3;
+)
+SELECT *, (PeopleVaccinated/Population) *100
+FROM PopvsVac;

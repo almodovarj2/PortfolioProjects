@@ -19,7 +19,7 @@ SELECT location,date, total_cases,total_deaths, (total_deaths/total_cases) *100 
 FROM `portfolio-357219.COVID_Data.Covid_deaths`
 ORDER BY 1,2;
 
--- Comparing Total Cases to 
+-- Comparing Total Cases to population
 -- Shows the percentage of Population that contracted Covid
 SELECT location,date, total_cases,population, (total_cases/population)*100 AS InfectionRate
 FROM `portfolio-357219.COVID_Data.Covid_deaths`

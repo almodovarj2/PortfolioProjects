@@ -13,7 +13,7 @@ FROM `bigquery-public-data.austin_crime.crime`;
 SELECT primary_type, description sub_category,  district, year, timestamp
 FROM `bigquery-public-data.austin_crime.crime`
 WHERE 1 IS NULL;
-
+ 
 -- I checked each column for nulls and found none
 
 --Determing how many types of crime are in the table
@@ -41,7 +41,7 @@ SELECT DISTINCT district
 FROM `bigquery-public-data.austin_crime.crime`;
 
 
--- Prepping the table for export to Tableau
+-- Prepping the table for export to Tableau.
 SELECT
 CASE
   WHEN primary_type LIKE '%heft%' THEN 'Theft'

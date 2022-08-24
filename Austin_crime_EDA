@@ -8,7 +8,7 @@ LIMIT 1000;
 SELECT primary_type, description sub_category,  district, year
 FROM `bigquery-public-data.austin_crime.crime`;
 
--- Checking for null values in my data
+-- Checking for null values in my data.
 
 SELECT primary_type, description sub_category,  district, year, timestamp
 FROM `bigquery-public-data.austin_crime.crime`

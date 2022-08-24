@@ -14,7 +14,7 @@ FROM `portfolio-357219.COVID_Data.Covid_deaths`
 ORDER BY 1,2;
 
 -- Comparing Total Cases to Total Deaths
--- Shows the mortality rate as a percentage, per country.
+-- Shows the mortality rate as a percentage, per country
 SELECT location,date, total_cases,total_deaths, (total_deaths/total_cases) *100 as DeathPercentage
 FROM `portfolio-357219.COVID_Data.Covid_deaths`
 ORDER BY 1,2;

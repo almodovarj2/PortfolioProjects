@@ -1,0 +1,53 @@
+-- I am exploring the Austin Crime Dataset to gain insights. Looking for answers to questions like what crimes are most common, what year is there the most crime, etc.
+SELECT *
+FROM `bigquery-public-data.austin_crime.crime` as crime_data
+LIMIT 1000;
+
+--Now that I have a general overview of the data, I want to select only the rows most relevant to my analysis.
+
+SELECT primary_type, description sub_category,  district, year
+FROM `bigquery-public-data.austin_crime.crime`;
+
+-- Checking for null values in my data
+
+SELECT primary_type, description sub_category,  district, year, timestamp
+FROM `bigquery-public-data.austin_crime.crime`
+WHERE 1 IS NULL;
+
+-- I checked each column for nulls and found none
+
+--Determing how many types of crime are in the table
+SELECT distinct primary_type
+FROM `bigquery-public-data.austin_crime.crime`;
+
+-- There are some issues with the data. It has two categories that are both aggravated assault. Two burglary categories, two murder categories, and multiple theft categories. I'm going to create a case statement to summarize the primary types into a more concise way.
+SELECT DISTINCT
+CASE
+  WHEN primary_type LIKE '%heft%' THEN 'Theft'
+  WHEN primary_type LIKE '%urglary%' THEN 'Burglary'
+  WHEN primary_type LIKE '%ssault%' THEN 'Assault'
+  WHEN primary_type LIKE '%urder%' THEN 'Murder'
+  ELSE primary_type
+END crime_category
+FROM `bigquery-public-data.austin_crime.crime`;
+
+
+-- How many unique sub-types are in the dataset?
+SELECT DISTINCT description
+FROM `bigquery-public-data.austin_crime.crime`;
+
+--  How many districts are in the dataset?
+SELECT DISTINCT district
+FROM `bigquery-public-data.austin_crime.crime`;
+
+
+-- Prepping the table for export to Tableau
+SELECT
+CASE
+  WHEN primary_type LIKE '%heft%' THEN 'Theft'
+  WHEN primary_type LIKE '%urglary%' THEN 'Burglary'
+  WHEN primary_type LIKE '%ssault%' THEN 'Assault'
+  WHEN primary_type LIKE '%urder%' THEN 'Murder'
+  ELSE primary_type
+END crime_category, description AS sub_category,district, year, timestamp,
+FROM `bigquery-public-data.austin_crime.crime`;

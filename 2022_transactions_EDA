@@ -1,0 +1,54 @@
+--Previewing the layout of the data
+SELECT *
+FROM `portfolio-357219.my_transaction_data.transactions_2022`
+LIMIT 10;
+
+--Description of my expenses
+SELECT description, COUNT(*) num_transactions, ROUND(SUM(debit),2) total_spent
+FROM `portfolio-357219.my_transaction_data.transactions_2022`
+WHERE credit IS NULL
+GROUP BY 1
+HAVING count(*) >1
+ORDER BY 3 desc;
+
+-- Description of my income
+SELECT description, COUNT(*) num_transactions, ROUND(SUM(credit),2) total_income
+FROM `portfolio-357219.my_transaction_data.transactions_2022`
+WHERE debit IS NULL
+GROUP BY 1
+HAVING count(*) >1
+ORDER BY 3 desc;
+
+-- Seeing how much spent monthly, not including savings
+SELECT EXTRACT(MONTH FROM date) month, ROUND(SUM(debit),2) total_spent
+FROM `portfolio-357219.my_transaction_data.transactions_2022`
+WHERE credit IS NULL
+AND description NOT LIKE 'Savings'
+GROUP by 1
+ORDER BY 1;
+
+--I updated Query to return the month name instead of a single integer.
+SELECT FORMAT_DATE('%B', date) month, ROUND(SUM(debit),2) total_spent
+FROM `portfolio-357219.my_transaction_data.transactions_2022`
+WHERE credit IS NULL
+AND description NOT LIKE 'Savings'
+GROUP by 1
+ORDER BY 1;
+
+--Which day of the week did I spend the most money?
+SELECT FORMAT_DATE('%A', date) day_of_week, ROUND(SUM(debit),2) total_spent
+FROM `portfolio-357219.my_transaction_data.transactions_2022`
+WHERE credit IS NULL
+AND description NOT LIKE 'Savings'
+GROUP by 1
+ORDER BY 1;
+/* Note: There is no data for Saturday or Sunday. Initially I thought it was an error in the data,
+but through further research I realized my bank does not clear any transactions on weekends.
+Those transactions pend until the following Monday or Tuesday (Which is why those days are highest)
+*/
+
+-- How much went to savings?
+SELECT description, sum(debit) total_saved
+FROM `portfolio-357219.my_transaction_data.transactions_2022`
+WHERE Description = 'Savings'
+GROUP BY 1;

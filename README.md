@@ -1,5 +1,5 @@
-### Joshua Almodovar's Portfolio
+# Welcome to my Portfolio!
 
-This Repository is where I upload all my code from my EDA projects in SQL, and from any Python work I do.
+This Repository is where I upload my projects, and demonstrate my skills in SQL, Python, and whatever else I'm learning at the time.
 
-I use Google BigQuery and Jupyter notebooks for my code, so if you see a single commit only, that's why.
+*Note: I sometimes use Google BigQuery and Jupyter notebooks for my code, so if you see a single commit only, that's why.* 

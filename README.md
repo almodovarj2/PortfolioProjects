@@ -1,3 +1,5 @@
-# README
+# Almo Labs
 
-My personal repository where I share projects, works in progress, and things I'm tinkering and experimenting with.
+A public workshop for small software projects, automation tools, data utilities, and experiments.
+
+Some projects are quick prototypes. Others may progress into standalone projects with their own repository.
